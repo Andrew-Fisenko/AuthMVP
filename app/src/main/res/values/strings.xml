@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AuthMVP</string>
+    <string name="log_on">Log on</string>
+    <string name="hint_login">your login</string>
+    <string name="hint_password">your password</string>
+    <string name="failure">Invalid password!</string>
 </resources>
