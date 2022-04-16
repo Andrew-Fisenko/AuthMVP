@@ -4,4 +4,6 @@
     <string name="hint_login">your login</string>
     <string name="hint_password">your password</string>
     <string name="failure">Invalid password!</string>
+    <string name="registration">Registration</string>
+    <string name="forget_pass">Forget password</string>
 </resources>

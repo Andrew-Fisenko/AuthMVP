@@ -1,5 +1,6 @@
 package com.example.authmvp
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity(), LoginContract.View {
         setContentView(binding.root)
         presenter = restorePresenter()
         presenter?.onAttach(this)
+        binding.forgetPass.isVisible = false
 
         binding.authButton.setOnClickListener {
             presenter?.onLogin(
@@ -42,14 +44,16 @@ class MainActivity : AppCompatActivity(), LoginContract.View {
     @MainThread
     override fun setSuccess() {
         binding.authButton.isVisible = false
-        binding.authButton.isVisible = false
-        binding.authButton.isVisible = false
+        binding.forgetPass.isVisible = false
+        binding.registration.isVisible = false
         binding.root.setBackgroundColor(Color.GREEN)
     }
 
     @MainThread
     override fun setError(error: String) {
         Toast.makeText(this, "ERROR $error", Toast.LENGTH_SHORT).show()
+        binding.forgetPass.isVisible = true
+        binding.root.setBackgroundColor(Color.RED)
     }
 
     @MainThread

@@ -8,21 +8,19 @@ class LoginPresenter : LoginContract.Presenter {
     private var view: LoginContract.View? = null
     private val uiHandler = Handler(Looper.getMainLooper())
     private var currentResut: Boolean = false
-    private var errorText: String = ""
+    private var errorText: String = "ERROR"
 
     override fun onAttach(view: LoginContract.View) {
         this.view = view
         if (currentResut) {
             view.setSuccess()
-        } else {
-            view.setError(errorText)
         }
     }
 
     override fun onLogin(login: String, password: String) {
         view?.showProgress()
         Thread {
-            sleep(3000)
+            sleep(1000)
             uiHandler.post {
                 view?.hideProgress()
                 if (checkCredentials(login, password)) {
@@ -30,9 +28,9 @@ class LoginPresenter : LoginContract.Presenter {
                     currentResut = true
                     errorText = ""
                 } else {
-                    view?.setError(R.string.failure.toString())
+                    errorText = "Invalid password!"
+                    view?.setError(errorText)
                     currentResut = false
-                    errorText = R.string.failure.toString()
                 }
             }
         }.start()
