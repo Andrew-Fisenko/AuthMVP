@@ -20,7 +20,7 @@ class LoginPresenter : LoginContract.Presenter {
     override fun onLogin(login: String, password: String) {
         view?.showProgress()
         Thread {
-            sleep(1000)
+            sleep(2000)
             uiHandler.post {
                 view?.hideProgress()
                 if (checkCredentials(login, password)) {

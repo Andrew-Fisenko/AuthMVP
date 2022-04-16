@@ -1,20 +1,21 @@
 package com.example.authmvp
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.MainThread
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.authmvp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), LoginContract.View {
     private lateinit var binding: ActivityMainBinding
     private var presenter: LoginContract.Presenter? = null
+    private var handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity(), LoginContract.View {
         presenter = restorePresenter()
         presenter?.onAttach(this)
         binding.forgetPass.isVisible = false
+        binding.progressBar.isVisible = false
 
         binding.authButton.setOnClickListener {
             presenter?.onLogin(
@@ -59,6 +61,8 @@ class MainActivity : AppCompatActivity(), LoginContract.View {
     @MainThread
     override fun showProgress() {
         binding.authButton.isEnabled = false
+        binding.progressBar.isVisible = true
+        postProgress()
         hideKeyboard(this)
     }
 
@@ -75,5 +79,22 @@ class MainActivity : AppCompatActivity(), LoginContract.View {
             view = View(activity)
         }
         imn.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun postProgress() {
+        var progressStatus = binding.progressBar!!.progress
+        Thread(Runnable {
+            while (progressStatus < 100) {
+                progressStatus += 5
+                handler.post(Runnable {
+                    binding.progressBar!!.progress = progressStatus
+                })
+                try {
+                    Thread.sleep(100)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+            }
+        }).start()
     }
 }
