@@ -53,8 +53,8 @@ class MainActivity : AppCompatActivity(), LoginContract.View {
 
     @MainThread
     override fun setError(error: String) {
-        Toast.makeText(this, "ERROR $error", Toast.LENGTH_SHORT).show()
         binding.forgetPass.isVisible = true
+        Toast.makeText(this, "ERROR $error", Toast.LENGTH_SHORT).show()
         binding.root.setBackgroundColor(Color.RED)
     }
 
