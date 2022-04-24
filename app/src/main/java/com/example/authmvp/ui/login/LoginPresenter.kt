@@ -1,12 +1,11 @@
-package com.example.authmvp
+package com.example.authmvp.ui.login
 
-import android.os.Handler
-import android.os.Looper
-import java.lang.Thread.sleep
+import com.example.authmvp.domain.LoginInteractor
 
-class LoginPresenter : LoginContract.Presenter {
+class LoginPresenter(
+    private val loginInteractor: LoginInteractor
+) : LoginContract.Presenter {
     private var view: LoginContract.View? = null
-    private val uiHandler = Handler(Looper.getMainLooper())
     private var currentSucsess: Boolean = false
     private var currentError: Boolean = false
     private var errorText: String = "ERROR"
@@ -22,21 +21,19 @@ class LoginPresenter : LoginContract.Presenter {
 
     override fun onLogin(login: String, password: String) {
         view?.showProgress()
-        Thread {
-            sleep(2000)
-            uiHandler.post {
-                view?.hideProgress()
-                if (checkCredentials(login, password)) {
-                    view?.setSuccess()
-                    currentSucsess = true
-                    errorText = ""
-                } else {
-                    errorText = "Invalid password!"
-                    view?.setError(errorText)
-                    currentError = true
-                }
+
+        loginInteractor.login(login, password) { result ->
+            view?.hideProgress()
+            if (result) {
+                view?.setSuccess()
+                currentSucsess = true
+                errorText = ""
+            } else {
+                errorText = "Invalid password!"
+                view?.setError(errorText)
+                currentError = true
             }
-        }.start()
+        }
     }
 
     private fun checkCredentials(login: String, password: String): Boolean {

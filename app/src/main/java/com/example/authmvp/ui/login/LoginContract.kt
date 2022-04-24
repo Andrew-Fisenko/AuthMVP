@@ -1,4 +1,4 @@
-package com.example.authmvp
+package com.example.authmvp.ui.login
 
 import androidx.annotation.MainThread
 
@@ -19,8 +19,13 @@ class LoginContract {
     }
 
     interface Presenter {
+        @MainThread
         fun onAttach(view: View)
+
+        @MainThread
         fun onLogin(login: String, password: String)
+
+        @MainThread
         fun onCredentialsChanged()
     }
 }
